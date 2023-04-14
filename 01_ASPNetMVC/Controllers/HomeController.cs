@@ -34,15 +34,15 @@ public class HomeController : Controller
                 Title = "Featured Products",
                 CollectionItems = new List<CollectionItemModel>
                 {
-                    new CollectionItemModel { ID = "1", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "https://kyhnet22sa.blob.core.windows.net/product-images/black-coat.png" },
-                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "https://kyhnet22sa.blob.core.windows.net/product-images/black-coat.png" },
-                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "https://kyhnet22sa.blob.core.windows.net/product-images/black-coat.png" },
-                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "https://kyhnet22sa.blob.core.windows.net/product-images/black-coat.png" },
-                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "https://kyhnet22sa.blob.core.windows.net/product-images/black-coat.png" },
-                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "https://kyhnet22sa.blob.core.windows.net/product-images/black-coat.png" },
-                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "https://kyhnet22sa.blob.core.windows.net/product-images/black-coat.png" },
-                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "https://kyhnet22sa.blob.core.windows.net/product-images/black-coat.png" },
-                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "https://kyhnet22sa.blob.core.windows.net/product-images/black-coat.png" },
+                    new CollectionItemModel { ID = "1", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
+                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
+                    new CollectionItemModel { ID = "3", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
+                    new CollectionItemModel { ID = "4", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png"},
+                    new CollectionItemModel { ID = "5", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png"},
+                    new CollectionItemModel { ID = "6", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
+                    new CollectionItemModel { ID = "7", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
+                    new CollectionItemModel { ID = "8", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
+                    new CollectionItemModel { ID = "9", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
 
                 }
 
