@@ -1,11 +1,8 @@
-﻿namespace _01_ASPNetMVC.Models
+﻿namespace _01_ASPNetMVC.Models;
+
+public class CollectionModel
 {
-    public class CollectionModel
-    {
-        public string Title { get; set; } = null!;
+    public string? Title { get; set; }
 
-        public List<CollectionItemModel> CollectionItems { get; set; } = null!;
-
-
-    }
+    public List<CollectionItemModel>? CollectionItems { get; set; }
 }

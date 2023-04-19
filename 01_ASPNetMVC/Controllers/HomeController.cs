@@ -1,63 +1,60 @@
 ﻿using _01_ASPNetMVC.Models;
 using _01_ASPNetMVC.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-namespace _01_ASPNetMVC.Controllers;
-
-public class HomeController : Controller
+namespace _01_ASPNetMVC.Controllers
 {
-    public IActionResult Index()
-    {
-        var viewModel = new IndexViewModel()
-        {
-            SpecialOffer = new SpecialOffer()
-            {
-                Image1 = "/Images/office-style.png",
-                Image2 = "/Images/party-style.png",
-                Offer = "50% Offer",
-                Title = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, ipsam quo voluptatum facere iure fuga. Necessitatibus quasi voluptatem delectus nam?",
+	public class HomeController : Controller
+	{
+		private readonly HttpClient _httpClient;
 
-            },
+		public HomeController(IHttpClientFactory httpClientFactory)
+		{
+			_httpClient = httpClientFactory.CreateClient("myApi");
+		}
 
+		public async Task<CollectionModel> GetProductsByTag(string tag)
+		{
+			var response = await _httpClient.GetAsync($"/products/tag/{tag}");
 
-            IntroOffer = new Intro()
-            {
-                Title1 = "Don't Miss This Opportunity",
-                Title2 = "GET UP TO 40% OFF",
-                Title3 = "Online shopping free home delivery over $100",
+			if (response.IsSuccessStatusCode)
+			{
+				var products = await response.Content.ReadAsAsync<List<CollectionItemModel>>();
+				return new CollectionModel { CollectionItems = products };
+			}
+			else
+			{
+				throw new Exception("Failed to retrieve products from API");
+			}
+		}
 
-            },
-
-            Showcase = new CollectionModel
-            {
-
-                Title = "Featured Products",
-                CollectionItems = new List<CollectionItemModel>
-                {
-                    new CollectionItemModel { ID = "1", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
-                    new CollectionItemModel { ID = "2", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
-                    new CollectionItemModel { ID = "3", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
-                    new CollectionItemModel { ID = "4", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png"},
-                    new CollectionItemModel { ID = "5", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png"},
-                    new CollectionItemModel { ID = "6", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
-                    new CollectionItemModel { ID = "7", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
-                    new CollectionItemModel { ID = "8", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
-                    new CollectionItemModel { ID = "9", Category = "Coat", Title = "Very large and old coat", Price = 300m, ImageUrl = "/Images/coatt.png" },
-
-                }
-
-            },
-
-
-         
-    
-        };
-
-
-
-
-
-        //ViewData["Category"] = "Featured Products";
-        return View(viewModel);
-    }
+		public async Task<IActionResult> Index()
+		{
+			var viewModel = new IndexViewModel()
+			{
+				SpecialOffer = new SpecialOffer()
+				{
+					Image1 = "/Images/office-style.png",
+					Image2 = "/Images/party-style.png",
+					Offer = "50% Offer",
+					Title = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, ipsam quo voluptatum facere iure fuga. Necessitatibus quasi voluptatem delectus nam?",
+				},
+				IntroOffer = new Intro()
+				{
+					Title1 = "Don't Miss This Opportunity",
+					Title2 = "GET UP TO 40% OFF",
+					Title3 = "Online shopping free home delivery over $100",
+				},
+				Showcase = await GetProductsByTag("Featured"),
+				NewProducts = await GetProductsByTag("New"),
+				PopularProducts = await GetProductsByTag("Popular")
+			};
+			return View(viewModel);
+		}
+	}
 }

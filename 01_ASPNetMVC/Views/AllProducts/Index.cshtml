@@ -1,0 +1,7 @@
+﻿@model _01_ASPNetMVC.ViewModels.AllProductsViewModel
+
+<div class="card-deck">
+    <partial name="~/Views/Shared/_CollectionPartial.cshtml" model="@Model.Showcase" />
+    <partial name="~/Views/Shared/_CollectionPartial.cshtml" model="@Model.PopularProducts" />
+    <partial name="~/Views/Shared/_CollectionPartial.cshtml" model="@Model.NewProducts" />
+</div>
