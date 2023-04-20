@@ -1,24 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using _01_ASPNetMVC.Models;
+﻿using _01_ASPNetMVC.Models;
 using _01_ASPNetMVC.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 public class AllProductsController : Controller
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
 
     public AllProductsController(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClientFactory.CreateClient("myApi");
-	
-	}
+        _httpClientFactory = httpClientFactory;
+    }
 
     [HttpGet]
     public async Task<List<CollectionItemModel>> GetProductsByTag(string tag)
     {
-        var response = await _httpClient.GetAsync($"/products/tag/{tag}");
+        using var httpClient = _httpClientFactory.CreateClient("myApi");
+        httpClient.DefaultRequestHeaders.Add("x-api-key", "755d128a-d2ae-43f9-a521-41712709f1b5");
+        var response = await httpClient.GetAsync($"/products/tag/{tag}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -31,16 +29,22 @@ public class AllProductsController : Controller
         }
     }
 
-	public async Task<IActionResult> Index()
-	{
-		var viewModel = new AllProductsViewModel
-		{
-			Showcase = new CollectionModel { Title = "Featured", CollectionItems = await GetProductsByTag("Featured") },
-			NewProducts = new CollectionModel { Title = "New Products", CollectionItems = await GetProductsByTag("New") },
-			PopularProducts = new CollectionModel { Title = "Popular Products", CollectionItems = await GetProductsByTag("Popular") }
-		};
+    public async Task<IActionResult> Index()
+    {
+        var featuredProductsTask = GetProductsByTag("Featured");
+        var newProductsTask = GetProductsByTag("New");
+        var popularProductsTask = GetProductsByTag("Popular");
 
-		return View(viewModel);
-	}
+      
+        await Task.WhenAll(featuredProductsTask, newProductsTask, popularProductsTask);
 
+        var viewModel = new AllProductsViewModel
+        {
+            Showcase = new CollectionModel { Title = "Featured", CollectionItems = await featuredProductsTask },
+            NewProducts = new CollectionModel { Title = "New Products", CollectionItems = await newProductsTask },
+            PopularProducts = new CollectionModel { Title = "Popular Products", CollectionItems = await popularProductsTask }
+        };
+
+        return View(viewModel);
+    }
 }

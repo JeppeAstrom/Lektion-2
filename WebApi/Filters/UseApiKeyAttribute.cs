@@ -1,34 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
-namespace WebApi.Filters
+namespace Fixxo_Web_Api.Filters
 {
-	public class UseApiKeyAttribute : TypeFilterAttribute
-	{
-		public UseApiKeyAttribute() : base(typeof(ApiKeyFilter))
-		{
-		}
+    public class UseApiKeyAttribute : Attribute, IAsyncActionFilter
+    {
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            var config = context.HttpContext.RequestServices.GetService<IConfiguration>();
+            var apiKey = config?.GetValue<string>("ApiKey");
 
-		private class ApiKeyFilter : IAsyncActionFilter
-		{
-			private readonly string _apiKey;
+            if (!context.HttpContext.Request.Headers.TryGetValue("x-api-key", out var key))
+            {
+                context.Result = new UnauthorizedResult();
+                return;
+            }
 
-			public ApiKeyFilter(IConfiguration config)
-			{
-				_apiKey = config.GetValue<string>("ApiKey");
-			}
+            if (apiKey == null || !apiKey.Equals(key))
+            {
+                context.Result = new UnauthorizedResult();
+                return;
+            }
 
-			public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-			{
-				if (!context.HttpContext.Request.Headers.TryGetValue("X-API-Key", out var apiKey) || apiKey != _apiKey)
-				{
-					context.Result = new UnauthorizedResult();
-					return;
-				}
-
-				await next();
-			}
-		}
-	}
+            await next();
+        }
+    }
 }

@@ -26,6 +26,7 @@ public class ContactsController : Controller
     [HttpPost]
     public async Task<IActionResult> AddContact(ContactsFormModel model)
     {
+        _httpClient.DefaultRequestHeaders.Add("x-api-key", "755d128a-d2ae-43f9-a521-41712709f1b5");
         if (ModelState.IsValid)
         {
             try

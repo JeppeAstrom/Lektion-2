@@ -11,29 +11,38 @@ namespace _01_ASPNetMVC.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly HttpClient _httpClient;
+    
+            private readonly IHttpClientFactory _httpClientFactory;
 
-		public HomeController(IHttpClientFactory httpClientFactory)
-		{
-			_httpClient = httpClientFactory.CreateClient("myApi");
-		}
+            public HomeController(IHttpClientFactory httpClientFactory)
+            {
+                _httpClientFactory = httpClientFactory;
+            }
 
-		public async Task<CollectionModel> GetProductsByTag(string tag)
-		{
-			var response = await _httpClient.GetAsync($"/products/tag/{tag}");
+            // ...
+        
 
-			if (response.IsSuccessStatusCode)
-			{
-				var products = await response.Content.ReadAsAsync<List<CollectionItemModel>>();
-				return new CollectionModel { CollectionItems = products };
-			}
-			else
-			{
-				throw new Exception("Failed to retrieve products from API");
-			}
-		}
 
-		public async Task<IActionResult> Index()
+        public async Task<CollectionModel> GetProductsByTag(string tag)
+        {
+            var httpClient = _httpClientFactory.CreateClient("myApi");
+            httpClient.DefaultRequestHeaders.Add("x-api-key", "755d128a-d2ae-43f9-a521-41712709f1b5");
+
+            var response = await httpClient.GetAsync($"/products/tag/{tag}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var products = await response.Content.ReadAsAsync<List<CollectionItemModel>>();
+                return new CollectionModel { Title = tag, CollectionItems = products };
+            }
+
+            else
+            {
+                throw new Exception("Failed to retrieve products from API");
+            }
+        }
+
+        public async Task<IActionResult> Index()
 		{
 			var viewModel = new IndexViewModel()
 			{

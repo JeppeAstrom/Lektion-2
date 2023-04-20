@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Fixxo_Web_Api.Filters;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Contexts;
@@ -9,6 +10,7 @@ namespace WebApi.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
+    [UseApiKey]
     public class ContactsController : ControllerBase
     {
 

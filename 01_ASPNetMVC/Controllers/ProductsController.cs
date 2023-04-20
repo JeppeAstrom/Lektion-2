@@ -7,6 +7,7 @@ using _01_ASPNetMVC.ViewModels;
 
 public class ProductsController : Controller
 {
+    
     private readonly HttpClient _httpClient;
 
     public ProductsController(IHttpClientFactory httpClientFactory)
@@ -19,6 +20,7 @@ public class ProductsController : Controller
     [HttpGet]
     public async Task<List<CollectionItemModel>> GetProductsByTag(string tag)
     {
+        _httpClient.DefaultRequestHeaders.Add("x-api-key", "755d128a-d2ae-43f9-a521-41712709f1b5");
         var response = await _httpClient.GetAsync($"/products/tag/{tag}");
 
         if (response.IsSuccessStatusCode)
@@ -35,6 +37,7 @@ public class ProductsController : Controller
 
     public async Task<CollectionItemModel> GetProductById(int id)
     {
+        _httpClient.DefaultRequestHeaders.Add("x-api-key", "755d128a-d2ae-43f9-a521-41712709f1b5");
         var response = await _httpClient.GetAsync($"/products/{id}");
 
         if (response.IsSuccessStatusCode)

@@ -1,21 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Fixxo_Web_Api.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Contexts;
-using WebApi.Filters;
+
 using WebApi.Models.Entities;
 
 namespace WebApi.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]
-	//[Authorize]
-	//[UseApiKey]
 
-	public class ProductsController : ControllerBase
+    [UseApiKey]
+
+    public class ProductsController : ControllerBase
     {   
         private readonly ProductDbContext _context;
 
